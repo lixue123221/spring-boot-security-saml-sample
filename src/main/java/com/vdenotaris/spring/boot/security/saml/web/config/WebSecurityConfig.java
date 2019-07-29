@@ -47,7 +47,6 @@ import org.springframework.security.saml.log.SAMLDefaultLogger;
 import org.springframework.security.saml.metadata.*;
 import org.springframework.security.saml.parser.ParserPoolHolder;
 import org.springframework.security.saml.processor.*;
-import org.springframework.security.saml.trust.httpclient.TLSProtocolConfigurer;
 import org.springframework.security.saml.util.VelocityFactory;
 import org.springframework.security.saml.websso.*;
 import org.springframework.security.web.DefaultSecurityFilterChain;
@@ -69,6 +68,13 @@ import java.util.*;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements InitializingBean, DisposableBean {
+
+    static {
+        System.setProperty("javax.net.ssl.trustStore", "F:\\chinasoft\\code\\cascert\\casServer.keystore");
+        System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+        System.setProperty("javax.net.ssl.keyStore", "F:\\chinasoft\\code\\cascert\\casServer.keystore");
+        System.setProperty("javax.net.ssl.keyStorePassword", "changeit");
+    }
 
     private Timer backgroundTaskTimer;
     private MultiThreadedHttpConnectionManager multiThreadedHttpConnectionManager;
@@ -212,7 +218,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
     @Bean
     public ExtendedMetadata extendedMetadata() {
         ExtendedMetadata extendedMetadata = new ExtendedMetadata();
-        extendedMetadata.setIdpDiscoveryEnabled(true);
+        extendedMetadata.setIdpDiscoveryEnabled(false);
         extendedMetadata.setSignMetadata(false);
         extendedMetadata.setEcpEnabled(true);
         return extendedMetadata;
